@@ -49,7 +49,7 @@ class Player(pygame.sprite.Sprite):
             self.on_ground = False
 
         # Гравитация
-        self.y_speed += 0.8
+        self.y_speed += 0.6
 
         # Обновление позиции
         self.rect.x += self.x_speed
