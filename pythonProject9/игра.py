@@ -18,7 +18,7 @@ asteroid_image = pygame.transform.scale(pygame.image.load("asteroid.png"), (40, 
 flag_size = (20, 30)
 flag_image = pygame.transform.scale(pygame.image.load("flag_image.png"), flag_size)
 
-sky_image = pygame.image.load("sky.jpg")  # Укажите правильный путь к вашему изображению sky.png
+sky_image = pygame.image.load("sky.jpg")  
 sky_image = pygame.transform.scale(sky_image, (WIDTH, HEIGHT))
 # Шрифт для текста
 font = pygame.font.SysFont(None, 48)
