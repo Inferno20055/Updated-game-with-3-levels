@@ -7,7 +7,7 @@ pygame.init()
 # Размеры окна
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Прыжки и платформы")
+pygame.display.set_caption("Космонафт и астеройды")
 clock = pygame.time.Clock()
 
 # Загрузка изображений
@@ -18,11 +18,15 @@ asteroid_image = pygame.transform.scale(pygame.image.load("asteroid.png"), (40, 
 flag_size = (20, 30)
 flag_image = pygame.transform.scale(pygame.image.load("flag_image.png"), flag_size)
 
-sky_image = pygame.image.load("sky.jpg")  
+sky_image = pygame.image.load("sky.jpg")  # Укажите правильный путь к вашему изображению sky.png
 sky_image = pygame.transform.scale(sky_image, (WIDTH, HEIGHT))
 # Шрифт для текста
 font = pygame.font.SysFont(None, 48)
 
+# Загрузка изображения фона
+sky_background = pygame.image.load('sky_background.png')
+# Можно масштабировать изображение под размер экрана, если нужно:
+sky_background = pygame.transform.scale(sky_background, (WIDTH, HEIGHT))
 # Класс игрока
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -117,7 +121,7 @@ levels_data = [
             (600, HEIGHT -400),
             (350, HEIGHT -500),
         ],
-        "flag_pos": (WIDTH //2 , HEIGHT -550)
+        "flag_pos": (WIDTH //2 , HEIGHT -530)
     },
     # Уровень 3: финальный уровень.
     {
@@ -127,8 +131,9 @@ levels_data = [
             (500, HEIGHT -250),
             (700, HEIGHT -350),
             (400 ,HEIGHT -450),
+            (50 ,HEIGHT -450)
         ],
-        "flag_pos": (WIDTH //2 , HEIGHT -500)
+        "flag_pos": (WIDTH //8 , HEIGHT -480)
     }
 ]
 
@@ -170,6 +175,44 @@ danger_zone_height=10
 game_over=False
 victory=False
 
+
+def show_menu():
+    menu_active = True
+    while menu_active:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Нажатие Enter стартует игру.
+                    menu_active = False
+                elif event.key == pygame.K_ESCAPE:  # Esc закрывает игру.
+                    pygame.quit()
+                    sys.exit()
+
+        screen.fill((0, 0, 0))
+
+        # Отрисовка фона
+        screen.blit(sky_background, (0, 0))
+        title_text = font.render("Космонафт и астеройды", True, (255, 255, 255))
+        start_text = font.render("Нажмите Enter чтобы начать", True, (255, 255, 255))
+        nastroyki_text = font.render("Настройки", True, (255, 255, 255))
+        sparavka_text = font.render("Справка", True, (255, 255, 255))
+        exit_text = font.render("Нажмите Esc чтобы выйти", True, (255, 255, 255))
+
+
+        screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, HEIGHT// 3))
+        screen.blit(start_text, (WIDTH // 2 - start_text.get_width() // 2, HEIGHT // 2))
+        screen.blit(nastroyki_text, (WIDTH // 2 - exit_text.get_width() // 5, HEIGHT // 2 + 60))
+        screen.blit(sparavka_text, (WIDTH // 2 - exit_text.get_width() // 6, HEIGHT // 2 + 120))
+        screen.blit(exit_text, (WIDTH // 2 - exit_text.get_width() // 2, HEIGHT // 2 + 180))
+
+        pygame.display.flip()
+
+
+# Перед запуском основной игры показываем меню.
+show_menu()
+
 while True:
     for event in pygame.event.get():
        if event.type==pygame.QUIT:
@@ -209,13 +252,13 @@ while True:
        player_group.draw(screen)
        screen.blit(flag_image,(flag_rect.x ,flag_rect.y))
     elif victory:
-       text_surface=font.render("Победа!",True,(0 ,128 ,0))
-       text_rect=text_surface.get_rect(center=(WIDTH//2 ,HEIGHT//2))
-       screen.blit(text_surface,text_rect)
-    else:
-       text_surface=font.render("Вы проиграли",True,(255 ,0 ,0))
-       text_rect=text_surface.get_rect(center=(WIDTH//2 ,HEIGHT//2))
-       screen.blit(text_surface,text_rect)
+        text_surface = font.render("Победа!", True, (0, 128, 0))
+        text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        screen.blit(text_surface, text_rect)
+    else:  
+       text_surface = font.render("Вы проиграли", True, (255, 0, 0))
+       text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+       screen.blit(text_surface, text_rect)
 
     pygame.display.flip()
 
@@ -223,5 +266,6 @@ while True:
         pygame.time.wait(3000)
         pygame.quit()
         sys.exit()
+
 
     clock.tick(60)
